@@ -1,0 +1,6 @@
+.elements__group {
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+    padding: 22px 15px 22px 21px;
+}

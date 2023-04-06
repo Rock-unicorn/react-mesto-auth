@@ -1,0 +1,4 @@
+.popup-photo__container {
+    display: flex;
+    background-color: unset;
+}
