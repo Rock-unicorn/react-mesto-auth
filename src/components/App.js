@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Route, Routes, Navigate, useNavigate } from 'react-router-dom';
 import { Header } from './Header.js';
 import { Main } from './Main.js';
@@ -17,17 +17,18 @@ import { InfoTooltip } from './InfoTooltip.js';
 import * as auth from '../utils/auth.js';
 
 function App() {
-    const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
-    const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
-    const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
-    const [isDeletePlacePopupOpen, setIsDeleteAvatarPopupOpen] = React.useState(null);
-    const [selectedCard, setSelectedCard] = React.useState(null)
-    const [currentUser, setCurrentUser] = React.useState('');
-    const [cards, setCards] = React.useState([]);
-    const [loggedIn, setLoggedIn] = React.useState(false);
-    const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(false);
-    const [isSuccess, setIsSuccess] = React.useState(false);
-    const [userEmeil, setUserEmail] = React.useState('');
+    const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
+    const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
+    const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+    const [isDeletePlacePopupOpen, setIsDeleteAvatarPopupOpen] = useState(null);
+    const [selectedCard, setSelectedCard] = useState(null)
+    const [currentUser, setCurrentUser] = useState({});
+    const [cards, setCards] = useState([]);
+    const [loggedIn, setLoggedIn] = useState(false);
+    const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(false);
+    const [successMessage, setSuccessMessage] = useState('')
+    const [userEmeil, setUserEmail] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -68,7 +69,7 @@ function App() {
             auth.checkToken(jwt).then(res => {
                 setLoggedIn(true);
                 setUserEmail(res.data.email);
-                navigate('/main', { replace: true });
+                navigate('/', { replace: true });
             })
                 .catch((err) => console.log(err));
         }
@@ -78,11 +79,13 @@ function App() {
         auth.register(email, password)
             .then((res) => {
                 setIsSuccess(true);
+                setSuccessMessage('Вы успешно зарегистрировались!')
                 setIsInfoTooltipOpen(true);
                 navigate('/sign-in', { replace: true });
             })
             .catch(err => {
                 setIsSuccess(false);
+                setSuccessMessage('Что-то пошло не так! Попробуйте ещё раз.')
                 setIsInfoTooltipOpen(true);
                 console.log(err.message);
             })
@@ -92,10 +95,11 @@ function App() {
         auth.authorize(email, password).then((data) => {
             setLoggedIn(true);
             setUserEmail(email);
-            navigate('/main', { replace: true });
+            navigate('/', { replace: true });
         })
             .catch((err) => {
                 setIsSuccess(false);
+                setSuccessMessage('Что-то пошло не так! Попробуйте ещё раз.')
                 setIsInfoTooltipOpen(true);
                 console.log(err.message);
             })
@@ -207,10 +211,10 @@ function App() {
             <div className="page">
                 <Header loggedIn={loggedIn} email={userEmeil} handleSignOut={handleSignOut} />
                 <Routes>
-                    <Route path='/' element={loggedIn ? <Navigate to="/main" replace /> : <Navigate to="/sign-in" replace />} />
-                    <Route path='/sign-up' element={<Register handleRegisterSubmit={handleRegisterSubmit} />} />
-                    <Route path='/sign-in' element={<Login handleLoginSubmit={handleLoginSubmit} />} />
-                    <Route path='/main' element={<ProtectedRouteElement
+                    <Route path='*' element={loggedIn ? <Navigate to="/" replace /> : <Navigate to="/sign-in" replace />} />
+                    <Route path='sign-up' element={<Register handleRegisterSubmit={handleRegisterSubmit} />} />
+                    <Route path='sign-in' element={<Login handleLoginSubmit={handleLoginSubmit} />} />
+                    <Route path='/' element={<ProtectedRouteElement
                         element={Main}
                         loggedIn={loggedIn}
                         cards={cards}
@@ -221,16 +225,13 @@ function App() {
                         onCardLike={handleCardLike}
                         onCardDelete={handleDeletePlaceClick} />} />
                 </Routes>
-
-
                 <Footer />
-
                 <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopup} onOverlayClose={handleOverlayClick} onUpdateUser={handleUpdateUser} />
                 <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopup} onOverlayClose={handleOverlayClick} onUpdateAvatar={handleUpdateAvatar} />
                 <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopup} onOverlayClose={handleOverlayClick} onAddPlace={handleAddPlaceSubmit} />
                 <DeletePlacePopup card={isDeletePlacePopupOpen} onClose={closeAllPopup} onOverlayClose={handleOverlayClick} onDeletePlace={handleDeleteCard} />
                 <ImagePopup card={selectedCard} onClose={closeAllPopup} onOverlayClose={handleOverlayClick} />
-                <InfoTooltip isOpen={isInfoTooltipOpen} onClose={closeAllPopup} onOverlayClose={handleOverlayClick} isSuccess={isSuccess} />
+                <InfoTooltip isOpen={isInfoTooltipOpen} onClose={closeAllPopup} onOverlayClose={handleOverlayClick} isSuccess={isSuccess} successMessage={successMessage} />
             </div>
         </CurrentUserContext.Provider>
     );
