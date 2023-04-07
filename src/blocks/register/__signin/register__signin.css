@@ -1,0 +1,15 @@
+.register__signin {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    width: 358px;
+    height: 17px;
+    margin-top: 15px;
+}
+
+@media screen and (max-width:768px) {
+    .register__signin {
+        width: 260px;
+        margin-top: 20px;
+    }  
+}

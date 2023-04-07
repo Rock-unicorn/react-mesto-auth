@@ -1,0 +1,19 @@
+.register__input {
+    padding: 0;
+    margin-bottom: 30px;
+    width: 358px;
+    height: 27px;
+    border: 0;
+    border-bottom: 2px solid rgba(204, 204, 204, .2);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 1.2;
+    color: #FFFFFF;
+    background: none;
+}
+
+@media screen and (max-width:768px) {
+    .register__input {
+        width: 238px;
+    }
+}

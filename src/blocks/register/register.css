@@ -1,0 +1,15 @@
+.register {
+    width: calc(100% - 200px*2);
+    margin: 60px auto 80px;
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+
+@media screen and (max-width:768px) {
+    .register {
+        width: calc(100% - 30px*2);
+        margin: 40px auto 40px;
+    }
+}
