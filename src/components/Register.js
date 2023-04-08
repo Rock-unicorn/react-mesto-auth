@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { UseFormValidation } from "../hooks/UseFormValidation";
 
-
 export function Register(props) {
 
     const { values, errors, isValid, handleChange, resetForm } = UseFormValidation({});

@@ -8,8 +8,6 @@ export function EditProfilePopup(props) {
 
     const { values, errors, isValid, handleChange, resetForm } = UseFormValidation({});
 
-
-
     React.useEffect(() => {
         if (currentUser) {
             resetForm(currentUser, {}, true);
@@ -20,7 +18,6 @@ export function EditProfilePopup(props) {
         e.preventDefault();
         props.onUpdateUser(values);
     }
-
 
     return (
         <PopupWithForm isDisabled={!isValid} name='edit' title='Редактировать профиль' buttonName='Сохранить' isOpen={props.isOpen} onClose={props.onClose} onSubmit={handleSubmit} onOverlayClose={props.onOverlayClose} >

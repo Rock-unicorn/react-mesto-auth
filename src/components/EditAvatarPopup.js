@@ -9,8 +9,6 @@ export function EditAvatarPopup(props) {
         resetForm();
     }, [props.isOpen, resetForm])
 
-
-
     function handleSubmit(e) {
         e.preventDefault();
         props.onUpdateAvatar(values);
